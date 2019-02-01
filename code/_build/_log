@@ -1,0 +1,15 @@
+### Starting build.
+# Target: test.ml.depends, tags: { package(tsdl,tsdl_mixer,tsdl_image,tsdl_ttf), extension:ml, file:test.ml, ocaml, ocamldep, quiet }
+ocamlfind ocamldep -package tsdl,tsdl_mixer,tsdl_image,tsdl_ttf -modules test.ml > test.ml.depends
+# Target: test.cmo, tags: { package(tsdl,tsdl_mixer,tsdl_image,tsdl_ttf), byte, compile, extension:cmo, extension:ml, file:test.cmo, file:test.ml, implem, ocaml, quiet }
+ocamlfind ocamlc -c -package tsdl,tsdl_mixer,tsdl_image,tsdl_ttf -I tools -o test.cmo test.ml
++ ocamlfind ocamlc -c -package tsdl,tsdl_mixer,tsdl_image,tsdl_ttf -I tools -o test.cmo test.ml
+File "test.ml", line 9, characters 63-71:
+Warning 5: this function application is partial,
+maybe some arguments are missing.
+File "test.ml", line 16, characters 2-10:
+Warning 5: this function application is partial,
+maybe some arguments are missing.
+# Target: test.byte, tags: { package(tsdl,tsdl_mixer,tsdl_image,tsdl_ttf), byte, dont_link_with, extension:byte, file:test.byte, link, ocaml, program, quiet }
+ocamlfind ocamlc -linkpkg -package tsdl,tsdl_mixer,tsdl_image,tsdl_ttf test.cmo -o test.byte
+# Compilation successful.
