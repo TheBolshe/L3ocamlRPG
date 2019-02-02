@@ -29,20 +29,20 @@ let draw_filled_rectangle renderer (r, g, b, a) (up, down, left, right) =
     | Error (`Msg e) -> Error (`Msg e)
     | Ok () ->
       match Sdl.enclose_points [
-          Sdl.Point.create left up;
-          Sdl.Point.create right up;
-          Sdl.Point.create right down;
-          Sdl.Point.create left down
-        ] with
+        Sdl.Point.create left up;
+        Sdl.Point.create right up;
+        Sdl.Point.create right down;
+        Sdl.Point.create left down
+      ] with
       | None -> Error (`Msg "Error creating rectangle")
       | Some rect -> Sdl.render_fill_rect renderer (Some rect)
 
 let render_texture renderer (up, down, left, right) texture flip =
   match Sdl.enclose_points [
-      Sdl.Point.create left up;
-      Sdl.Point.create right up;
-      Sdl.Point.create right down;
-      Sdl.Point.create left down
-    ] with
+    Sdl.Point.create left up;
+    Sdl.Point.create right up;
+    Sdl.Point.create right down;
+    Sdl.Point.create left down
+  ] with
   | None -> Error (`Msg "Error creating rectangle")
   | Some rect -> Sdl.render_copy_ex renderer texture ~dst:rect 0.0 None flip

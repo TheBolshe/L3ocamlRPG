@@ -1,1 +1,1 @@
-test.ml: Result Sdl Tsdl
+test.ml: Result Sdl Sdl_tools Tsdl Tsdl_image

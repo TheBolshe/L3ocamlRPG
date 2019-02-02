@@ -22,30 +22,27 @@ let write_ttf renderer font font_size color s =
       | Ok texture -> Sdl.free_surface surface; Ok texture
 
 let draw_filled_rectangle renderer (r, g, b, a) (up, down, left, right) =
-  Sdl.log "test1";
   match Sdl.set_render_draw_color renderer r g b a with
   | Error (`Msg e) -> Error (`Msg e)
   | Ok () ->
-    Sdl.log "test12";
     match Sdl.set_render_draw_blend_mode renderer Sdl.Blend.mode_blend with
     | Error (`Msg e) -> Error (`Msg e)
     | Ok () ->
-      Sdl.log "test123";
       match Sdl.enclose_points [
-          Sdl.Point.create left up;
-          Sdl.Point.create right up;
-          Sdl.Point.create right down;
-          Sdl.Point.create left down
-        ] with
+        Sdl.Point.create left up;
+        Sdl.Point.create right up;
+        Sdl.Point.create right down;
+        Sdl.Point.create left down
+      ] with
       | None -> Error (`Msg "Error creating rectangle")
       | Some rect -> Sdl.render_fill_rect renderer (Some rect)
 
 let render_texture renderer (up, down, left, right) texture flip =
   match Sdl.enclose_points [
-      Sdl.Point.create left up;
-      Sdl.Point.create right up;
-      Sdl.Point.create right down;
-      Sdl.Point.create left down
-    ] with
+    Sdl.Point.create left up;
+    Sdl.Point.create right up;
+    Sdl.Point.create right down;
+    Sdl.Point.create left down
+  ] with
   | None -> Error (`Msg "Error creating rectangle")
   | Some rect -> Sdl.render_copy_ex renderer texture ~dst:rect 0.0 None flip
