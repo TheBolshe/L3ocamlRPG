@@ -24,8 +24,8 @@ let () =
   | Error (`Msg e) -> Sdl.log "Failed create texture : %s" e
   | Ok tex -> tex;
     Sdl.render_clear renderer;
-    let a = render_texture renderer (0,480,0,640) tex Sdl.Flip.none in
-    let a = Sdl.render_present renderer in
+    render_texture renderer (0,480,0,640) tex Sdl.Flip.none;
+    Sdl.render_present renderer;
     Sdl.delay 1000l;
     match load_image renderer "../data/pictures/fish.bmp" with
     | Error (`Msg e) -> Sdl.log "Failed create texture : %s" e

@@ -12,14 +12,12 @@ File "test.ml", line 25, characters 14-17:
 Warning 10: this expression should have type unit.
 File "test.ml", line 26, characters 4-29:
 Warning 10: this expression should have type unit.
+File "test.ml", line 27, characters 4-59:
+Warning 10: this expression should have type unit.
 File "test.ml", line 32, characters 16-19:
 Warning 10: this expression should have type unit.
 File "test.ml", line 33, characters 6-61:
 Warning 10: this expression should have type unit.
-File "test.ml", line 27, characters 8-9:
-Warning 26: unused variable a.
-File "test.ml", line 28, characters 8-9:
-Warning 26: unused variable a.
 # Target: tools/sdl_tools.ml.depends, tags: { package(tsdl,tsdl_mixer,tsdl_image,tsdl_ttf), extension:ml, file:tools/sdl_tools.ml, ocaml, ocamldep, quiet }
 ocamlfind ocamldep -package tsdl,tsdl_mixer,tsdl_image,tsdl_ttf -modules tools/sdl_tools.ml > tools/sdl_tools.ml.depends # cached
 # Target: tools/sdl_tools.cmo, tags: { package(tsdl,tsdl_mixer,tsdl_image,tsdl_ttf), byte, compile, extension:cmo, extension:ml, file:tools/sdl_tools.cmo, file:tools/sdl_tools.ml, implem, ocaml, quiet }
