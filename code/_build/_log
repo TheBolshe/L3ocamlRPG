@@ -1,27 +1,8 @@
 ### Starting build.
-# Target: test.ml.depends, tags: { package(tsdl,tsdl_mixer,tsdl_image,tsdl_ttf), extension:ml, file:test.ml, ocaml, ocamldep, quiet }
-ocamlfind ocamldep -package tsdl,tsdl_mixer,tsdl_image,tsdl_ttf -modules test.ml > test.ml.depends
-# Target: tools/sdl_tools.mli.depends, tags: { package(tsdl,tsdl_mixer,tsdl_image,tsdl_ttf), extension:mli, file:tools/sdl_tools.mli, ocaml, ocamldep, quiet }
-ocamlfind ocamldep -package tsdl,tsdl_mixer,tsdl_image,tsdl_ttf -modules tools/sdl_tools.mli > tools/sdl_tools.mli.depends # cached
-# Target: tools/sdl_tools.cmi, tags: { package(tsdl,tsdl_mixer,tsdl_image,tsdl_ttf), byte, compile, extension:mli, file:tools/sdl_tools.mli, interf, ocaml, quiet }
-ocamlfind ocamlc -c -package tsdl,tsdl_mixer,tsdl_image,tsdl_ttf -I tools -o tools/sdl_tools.cmi tools/sdl_tools.mli # cached
-# Target: test.cmo, tags: { package(tsdl,tsdl_mixer,tsdl_image,tsdl_ttf), byte, compile, extension:cmo, extension:ml, file:test.cmo, file:test.ml, implem, ocaml, quiet }
-ocamlfind ocamlc -c -package tsdl,tsdl_mixer,tsdl_image,tsdl_ttf -I tools -o test.cmo test.ml
-+ ocamlfind ocamlc -c -package tsdl,tsdl_mixer,tsdl_image,tsdl_ttf -I tools -o test.cmo test.ml
-File "test.ml", line 25, characters 14-17:
-Warning 10: this expression should have type unit.
-File "test.ml", line 26, characters 4-29:
-Warning 10: this expression should have type unit.
-File "test.ml", line 27, characters 4-59:
-Warning 10: this expression should have type unit.
-File "test.ml", line 32, characters 16-19:
-Warning 10: this expression should have type unit.
-File "test.ml", line 33, characters 6-61:
-Warning 10: this expression should have type unit.
-# Target: tools/sdl_tools.ml.depends, tags: { package(tsdl,tsdl_mixer,tsdl_image,tsdl_ttf), extension:ml, file:tools/sdl_tools.ml, ocaml, ocamldep, quiet }
-ocamlfind ocamldep -package tsdl,tsdl_mixer,tsdl_image,tsdl_ttf -modules tools/sdl_tools.ml > tools/sdl_tools.ml.depends # cached
-# Target: tools/sdl_tools.cmo, tags: { package(tsdl,tsdl_mixer,tsdl_image,tsdl_ttf), byte, compile, extension:cmo, extension:ml, file:tools/sdl_tools.cmo, file:tools/sdl_tools.ml, implem, ocaml, quiet }
-ocamlfind ocamlc -c -package tsdl,tsdl_mixer,tsdl_image,tsdl_ttf -I tools -o tools/sdl_tools.cmo tools/sdl_tools.ml # cached
-# Target: test.byte, tags: { package(tsdl,tsdl_mixer,tsdl_image,tsdl_ttf), byte, dont_link_with, extension:byte, file:test.byte, link, ocaml, program, quiet }
-ocamlfind ocamlc -linkpkg -package tsdl,tsdl_mixer,tsdl_image,tsdl_ttf -I tools tools/sdl_tools.cmo test.cmo -o test.byte
-# Compilation successful.
+# Target: test.ml.depends, tags: { package(tsdl,tsdl_mixer,tsdl_ttf,tsdl_image), extension:ml, file:test.ml, ocaml, ocamldep, quiet }
+ocamlfind ocamldep -package tsdl,tsdl_mixer,tsdl_ttf,tsdl_image -modules test.ml > test.ml.depends
++ ocamlfind ocamldep -package tsdl,tsdl_mixer,tsdl_ttf,tsdl_image -modules test.ml > test.ml.depends
+File "test.ml", line 42, characters 0-0:
+Error: Syntax error
+Command exited with code 2.
+# Compilation unsuccessful.
