@@ -1,8 +1,0 @@
-### Starting build.
-# Target: test.ml.depends, tags: { package(tsdl,tsdl_mixer,tsdl_ttf,tsdl_image), extension:ml, file:test.ml, ocaml, ocamldep, quiet }
-ocamlfind ocamldep -package tsdl,tsdl_mixer,tsdl_ttf,tsdl_image -modules test.ml > test.ml.depends
-+ ocamlfind ocamldep -package tsdl,tsdl_mixer,tsdl_ttf,tsdl_image -modules test.ml > test.ml.depends
-File "test.ml", line 42, characters 0-0:
-Error: Syntax error
-Command exited with code 2.
-# Compilation unsuccessful.

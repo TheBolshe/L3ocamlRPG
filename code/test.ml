@@ -35,7 +35,3 @@ let () =
   Sdl.destroy_window window;
   Sdl.quit ();
   exit 1
-
-
-let rec loop renderer event =
-  if Sdl.poll_event event 
