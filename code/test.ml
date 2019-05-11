@@ -3,6 +3,7 @@ open Tsdl_image
 open Result
 open Sdl_tools
 open Init_close
+open Model
 
 let display renderer =
   match load_image renderer "../data/pictures/fish.jpg" with
