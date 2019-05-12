@@ -169,15 +169,7 @@ let handle_event event scene =
       | `Close ->  true
       | _ -> false
     end
-  | `Key_down ->
-    begin
-      match (Sdl.Event.get event Sdl.Event.keyboard_keycode) with
-      | `Up -> true
-      | `Down -> true
-      | `Left -> true
-      | `Right -> true
-      | _ -> false
-    end
+  | `Key_down -> true
   | _ -> false
 
 let rec main_loop quit event scene window renderer =
