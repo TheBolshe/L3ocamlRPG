@@ -21,8 +21,9 @@ type direction = Up | Down | Left | Right
 type team = Blue | Red
 type typ = Archer | Warrior
 type terrain = Land | Mountain | Sea | Road | Forest
+type cursor_state = Selected | Free
 type position = {lign : int; column : int}
-type cursor = {cl : int; cc : int}
+type cursor = {cl : int; cc : int; state : cursor_state}
 type cell = {lign : int; column : int; terrain : terrain}
 type map = {height : int; width : int; tiles : cell list}
 type unite = {position : position; typ : typ; team : team; hp : int; dmg : int}
@@ -88,7 +89,7 @@ let create_scene map_string unit_string window renderer =
         | height :: width :: tiles -> create_map (int_of_string height) (int_of_string width) (explode (List.hd tiles))
         | _ -> (raise Invalid_map_input));
     units = (create_unit_list unit_info);
-    cursor = {cl = 1; cc = 4};
+    cursor = {cl = 1; cc = 4; state = Free};
     window = window;
     renderer = renderer
   }
@@ -119,8 +120,34 @@ let display_tiles map window renderer =
   let tile_height = w_height / map.height in
   List.iter (fun x -> display_tile x tile_width tile_height renderer) map.tiles
 
-let display_unit unite unit_width unith_height renderer =
-  ()
+let display_unit unite tile_width tile_height renderer =
+  let height = tile_height / 3 in
+  let width = tile_width / 3 in
+  let debut_contour_haut = tile_height / 4 in
+  let debut_contour_gauche = tile_width / 4 in
+  let disp_type =
+    ()
+  in
+  let display_color team =
+    match team with
+    | Blue -> (0, 0, 255, 255)
+    | Red -> (255, 0, 0, 255)
+  in
+  match draw_filled_rectangle renderer (0, 0, 0, 255) ((unite.position.lign * tile_height + debut_contour_haut), ((unite.position.lign + 1) * tile_height - debut_contour_haut), (unite.position.column * tile_width + debut_contour_gauche), ((unite.position.column + 1) * tile_width - debut_contour_gauche)) with
+  | Error (`Msg e) -> Sdl.log "Failed draw tile : %s" e
+  | Ok () ->
+    match draw_filled_rectangle renderer (display_color unite.team) ((unite.position.lign * tile_height + height), ((unite.position.lign + 1) * tile_height - height), (unite.position.column * tile_width + width), ((unite.position.column + 1) * tile_width - width)) with
+    | Error (`Msg e) -> Sdl.log "Failed draw tile : %s" e
+    | Ok () -> ()
+
+let display_units scene =
+  let (w_width, w_height) = Sdl.get_window_size scene.window in
+  let tile_width = w_width / scene.map.width in
+  let tile_height = w_height / scene.map.height in
+  List.iter (fun x ->
+      display_unit x tile_width tile_height scene.renderer
+    ) scene.units
+
 
 let display_cursor scene =
   let (w_width, w_height) = Sdl.get_window_size scene.window in
@@ -138,7 +165,8 @@ let update_cursor direction scene =
            units = scene.units;
            cursor = {
              cl = if scene.cursor.cl != 0 then scene.cursor.cl - 1 else scene.cursor.cl;
-             cc = scene.cursor.cc
+             cc = scene.cursor.cc;
+             state = scene.cursor.state
            };
            window = scene.window;
            renderer = scene.renderer}
@@ -146,7 +174,8 @@ let update_cursor direction scene =
               units = scene.units;
               cursor = {
                 cl = if scene.cursor.cl != scene.map.height - 1 then scene.cursor.cl + 1 else scene.cursor.cl;
-                cc = scene.cursor.cc
+                cc = scene.cursor.cc;
+                state = scene.cursor.state
               };
               window = scene.window;
               renderer = scene.renderer}
@@ -154,7 +183,8 @@ let update_cursor direction scene =
               units = scene.units;
               cursor = {
                 cl = scene.cursor.cl;
-                cc = if scene.cursor.cc != 0 then scene.cursor.cc - 1 else scene.cursor.cc
+                cc = if scene.cursor.cc != 0 then scene.cursor.cc - 1 else scene.cursor.cc;
+                state = scene.cursor.state
               };
               window = scene.window;
               renderer = scene.renderer}
@@ -162,22 +192,52 @@ let update_cursor direction scene =
               units = scene.units;
               cursor = {
                 cl = scene.cursor.cl;
-                cc = if scene.cursor.cc != scene.map.width - 1 then scene.cursor.cc + 1 else scene.cursor.cc
+                cc = if scene.cursor.cc != scene.map.width - 1 then scene.cursor.cc + 1 else scene.cursor.cc;
+                state = scene.cursor.state
               };
               window = scene.window;
               renderer = scene.renderer}
 
+let set_cursor_state scene state =
+  match state with
+  | Free -> {map = scene.map;
+             units = scene.units;
+             cursor = {
+               cl = scene.cursor.cl;
+               cc = scene.cursor.cc;
+               state = Free
+             };
+             window = scene.window;
+             renderer = scene.renderer}
+  | Selected -> {map = scene.map;
+                 units = scene.units;
+                 cursor = {
+                   cl = scene.cursor.cl;
+                   cc = scene.cursor.cc;
+                   state = Selected
+                 };
+                 window = scene.window;
+                 renderer = scene.renderer}
+
 let move_cursor_up scene =
-  update_cursor Up scene
+  match scene.cursor.state with
+  | Free -> update_cursor Up scene
+  | _ -> scene
 
 let move_cursor_down scene =
-  update_cursor Down scene
+  match scene.cursor.state with
+  | Free -> update_cursor Down scene
+  | _ -> scene
 
 let move_cursor_left scene =
-  update_cursor Left scene
+  match scene.cursor.state with
+  | Free -> update_cursor Left scene
+  | _ -> scene
 
 let move_cursor_right scene =
-  update_cursor Right scene
+  match scene.cursor.state with
+  | Free -> update_cursor Right scene
+  | _ -> scene
 
 let handle_event event scene =
   match Sdl.Event.enum (Sdl.Event.get event Sdl.Event.typ) with
@@ -193,11 +253,15 @@ let handle_event event scene =
     else if (Sdl.Event.get event Sdl.Event.keyboard_keycode) = Sdl.K.left then begin move_cursor_left scene end
     else if (Sdl.Event.get event Sdl.Event.keyboard_keycode) = Sdl.K.right then begin move_cursor_right scene end
     else if (Sdl.Event.get event Sdl.Event.keyboard_keycode) = Sdl.K.escape then begin shutdown scene.window scene.renderer end
+    else if (Sdl.Event.get event Sdl.Event.keyboard_keycode) = Sdl.K.return then begin set_cursor_state scene Selected end
+    else if (Sdl.Event.get event Sdl.Event.keyboard_keycode) = Sdl.K.b then begin set_cursor_state scene Free end
     else scene
   | _ -> scene
 
 let rec main_loop event scene =
+  Sdl.render_clear scene.renderer;
   display_tiles scene.map scene.window scene.renderer;
+  display_units scene;
   display_cursor scene;
   Sdl.render_present scene.renderer;
   begin
