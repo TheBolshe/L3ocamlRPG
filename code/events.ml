@@ -1,6 +1,6 @@
-open Tsdl
+(*open Tsdl
 
-let handle_event event =
+let handle_event event scene =
   match Sdl.Event.enum (Sdl.Event.get event Sdl.Event.typ) with
   | `Window_event ->
     begin
@@ -8,5 +8,9 @@ let handle_event event =
       | `Close ->  true
       | _ -> false
     end
-  | `Key_down -> true
+  | `Key_down ->
+    begin
+      true
+    end
   | _ -> false
+*)
