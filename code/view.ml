@@ -6,7 +6,7 @@ let print_map map =
     | [] -> ()
     | head -> ()
     | head :: tail -> ()
-*)
+
 let rec print_unit liste =
   match liste with
   | [] -> ()
@@ -21,3 +21,4 @@ let rec print_unit liste =
       print_unit x;
       print_unit s
     end
+*)
