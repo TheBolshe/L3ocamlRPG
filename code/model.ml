@@ -126,7 +126,7 @@ let display_cursor scene =
   let (w_width, w_height) = Sdl.get_window_size scene.window in
   let cursor_width = w_width / scene.map.width in
   let cursor_height = w_height / scene.map.height in
-  match draw_filled_rectangle scene.renderer (255, 0, 0, 25) ((scene.cursor.cl * cursor_height), ((scene.cursor.cl + 1) * cursor_height), (scene.cursor.cc * cursor_width), ((scene.cursor.cc + 1) * cursor_width)) with
+  match draw_filled_rectangle scene.renderer (255, 0, 0, 75) ((scene.cursor.cl * cursor_height), ((scene.cursor.cl + 1) * cursor_height), (scene.cursor.cc * cursor_width), ((scene.cursor.cc + 1) * cursor_width)) with
   | Error (`Msg e) -> Sdl.log "Failed draw cursor : %s" e
   | Ok () -> ()
 
@@ -137,7 +137,7 @@ let update_cursor direction scene =
   | Up -> {map = scene.map;
            units = scene.units;
            cursor = {
-             cl = scene.cursor.cl - 1;
+             cl = if scene.cursor.cl != 0 then scene.cursor.cl - 1 else scene.cursor.cl;
              cc = scene.cursor.cc
            };
            window = scene.window;
@@ -145,7 +145,7 @@ let update_cursor direction scene =
   | Down ->  {map = scene.map;
               units = scene.units;
               cursor = {
-                cl = scene.cursor.cl + 1;
+                cl = if scene.cursor.cl != scene.map.height - 1 then scene.cursor.cl + 1 else scene.cursor.cl;
                 cc = scene.cursor.cc
               };
               window = scene.window;
@@ -154,7 +154,7 @@ let update_cursor direction scene =
               units = scene.units;
               cursor = {
                 cl = scene.cursor.cl;
-                cc = scene.cursor.cc + 1
+                cc = if scene.cursor.cc != 0 then scene.cursor.cc - 1 else scene.cursor.cc
               };
               window = scene.window;
               renderer = scene.renderer}
@@ -162,7 +162,7 @@ let update_cursor direction scene =
               units = scene.units;
               cursor = {
                 cl = scene.cursor.cl;
-                cc = scene.cursor.cc - 1
+                cc = if scene.cursor.cc != scene.map.width - 1 then scene.cursor.cc + 1 else scene.cursor.cc
               };
               window = scene.window;
               renderer = scene.renderer}
@@ -187,7 +187,13 @@ let handle_event event scene =
       | `Close -> shutdown scene.window scene.renderer
       | _ -> scene
     end
-  | `Key_down -> shutdown scene.window scene.renderer
+  | `Key_down ->
+    if (Sdl.Event.get event Sdl.Event.keyboard_keycode) = Sdl.K.up then begin move_cursor_up scene end
+    else if (Sdl.Event.get event Sdl.Event.keyboard_keycode) = Sdl.K.down then begin move_cursor_down scene end
+    else if (Sdl.Event.get event Sdl.Event.keyboard_keycode) = Sdl.K.left then begin move_cursor_left scene end
+    else if (Sdl.Event.get event Sdl.Event.keyboard_keycode) = Sdl.K.right then begin move_cursor_right scene end
+    else if (Sdl.Event.get event Sdl.Event.keyboard_keycode) = Sdl.K.escape then begin shutdown scene.window scene.renderer end
+    else scene
   | _ -> scene
 
 let rec main_loop event scene =
