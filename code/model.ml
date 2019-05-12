@@ -166,18 +166,19 @@ let handle_event event scene =
   | `Window_event ->
     begin
       match Sdl.Event.window_event_enum (Sdl.Event.get event Sdl.Event.window_event_id) with
-      | `Close -> true
+      | `Close ->  true
       | _ -> false
     end
   | `Key_down ->
     begin
-      if (Sdl.Event.get event Sdl.Event.keyboard_keycode) = Sdl.K.up then begin (move_cursor_up scene), false end
-else if (Sdl.Event.get event Sdl.Event.keyboard_keycode) = Sdl.K.down then begin (move_cursor_down scene), false end
-else if (Sdl.Event.get event Sdl.Event.keyboard_keycode) = Sdl.K.left then begin (move_cursor_left scene), false end
-else if (Sdl.Event.get event Sdl.Event.keyboard_keycode) = Sdl.K.right then begin (move_cursor_right scene), false end
-else false
-end
-| _ -> false
+      match (Sdl.Event.get event Sdl.Event.keyboard_keycode) with
+      | `Up -> true
+      | `Down -> true
+      | `Left -> true
+      | `Right -> true
+      | _ -> false
+    end
+  | _ -> false
 
 let rec main_loop quit event scene window renderer =
   display_tiles scene.map window renderer;
